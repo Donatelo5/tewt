@@ -3,6 +3,7 @@ const {
     Bot,
     GrammyError,
     HttpError,
+    Keyboard,
     InlineKeyboard
 } = require('grammy');
 const  { hydrate } = require('@grammyjs/hydrate');
@@ -28,6 +29,72 @@ bot.command('start', async  (ctx) => {
         reply_parameters: {message_id: ctx.msg.message_id}
     });
 });
+
+bot.command('mood', async  (ctx) => {
+    //const moodKeyboard = new Keyboard().text('Хорошо').row().text('Нормально').row().text('Плохо').resized().
+    // oneTime()
+
+    const  moodLabels = ['Хорошо','Нормально','Плохо']
+    const rows = moodLabels.map((label) => {
+        return [
+            Keyboard.text(label)
+        ]
+    })
+    const moodKeyboard2 = Keyboard.from(rows).resized()
+    await ctx.reply('Как твоё настроение', {
+        reply_markup: moodKeyboard2
+    })
+})
+
+bot.command('share', async   (ctx) => {
+    const  shareKeyboard = new  Keyboard().requestLocation('Геолокацию').requestContact('Контакт').
+    requestPoll('Опрос').placeholder('Выбери...').resized().oneTime()
+
+    await ctx.reply('Чем хочешь поделиться?', {
+        reply_markup: shareKeyboard
+    })
+})
+
+
+
+bot.command('inline',async  (ctx) => {
+
+
+
+    const inlineKeyboard2 = new InlineKeyboard().url(' Превая ссылка', 'https://www.youtube.com/watch?v=F1YfH9LdCWA&t=302s')
+    await ctx.reply('Выберите цифру', {
+        reply_markup: inlineKeyboard2,
+    });
+});
+
+bot.callbackQuery([], async (ctx) => {
+   await ctx.answerCallbackQuery()
+    await ctx.reply('Вы нажали: ${ctx.callbackQuery.data}')
+})
+
+    bot.on('callback_query:data', async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await ctx.reply('Вы на: ${ctx.callbackQuery.data}');
+})
+
+
+bot.hears('Хорошо', async  (ctx) => {
+    await ctx.reply('здорово!', {
+        reply_markup: {remove_keyboard: true}
+    })
+})
+
+bot.hears('Нормально', async  (ctx) => {
+    await ctx.reply('У меня тоже нормально', {
+        reply_markup: {remove_keyboard: true}
+    })
+})
+
+bot.hears('Плохо', async  (ctx) => {
+    await ctx.reply('А ну быстро испарвляй', {
+        reply_markup: {remove_keyboard: true}
+    })
+})
 
 const menuKeyboard = new InlineKeyboard()
     .text('Узнать статус', 'order-status')
