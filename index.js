@@ -20,7 +20,18 @@ bot.api.setMyCommands([
         command: 'menu',
         description: 'Запросить Меню',
     },
-
+    {
+        command: 'mood',
+        description: 'Как ваше настроение',
+    },
+    {
+        command: 'share',
+        description: 'Ваши данные',
+    },
+    {
+        command: 'inline',
+        description: 'ссылка',
+    },
 ]);
 
 bot.command('start', async  (ctx) => {
@@ -58,8 +69,6 @@ bot.command('share', async   (ctx) => {
 
 
 bot.command('inline',async  (ctx) => {
-
-
 
     const inlineKeyboard2 = new InlineKeyboard().url(' Превая ссылка', 'https://www.youtube.com/watch?v=F1YfH9LdCWA&t=302s')
     await ctx.reply('Выберите цифру', {
